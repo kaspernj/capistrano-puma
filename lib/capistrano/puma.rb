@@ -159,6 +159,7 @@ end
 
 require 'capistrano/puma/workers'
 require 'capistrano/puma/daemon'
+require 'capistrano/puma/screen'
 require 'capistrano/puma/systemd'
 require 'capistrano/puma/monit'
 require 'capistrano/puma/jungle'
