@@ -41,8 +41,8 @@ namespace :puma do
             git_plugin.puma_switch_user(role) do
               with rack_env: fetch(:puma_env) do
                 if test "[ -f #{fetch(:puma_pid)} ]"
-                  if test :kill, "-0 $( cat #{fetch(:puma_pid)} )"
-                    execute :pumactl, "--control-url 'tcp://127.0.0.1:9293'", "--control-token foobar", "-F #{fetch(:puma_conf)} #{command}"
+                  if git_plugin.stop_puma
+                    git_plugin.run_puma_command(command)
                   else
                     # delete invalid pid file , process is not running.
                     execute :rm, fetch(:puma_pid)
@@ -65,9 +65,9 @@ namespace :puma do
           within current_path do
             git_plugin.puma_switch_user(role) do
               with rack_env: fetch(:puma_env) do
-                if test "[ -f #{fetch(:puma_pid)} ]" and test :kill, "-0 $( cat #{fetch(:puma_pid)} )"
+                if git_plugin.puma_running?
                   # NOTE pid exist but state file is nonsense, so ignore that case
-                  execute :pumactl, "--control-url 'tcp://127.0.0.1:9293'", "--control-token foobar", "-F #{fetch(:puma_conf)} #{command}"
+                  git_plugin.run_puma_command(command)
                 else
                   # Puma is not running or state file is not present : Run it
                   invoke 'puma:screen:start'
