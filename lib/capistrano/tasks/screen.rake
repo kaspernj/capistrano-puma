@@ -24,7 +24,7 @@ namespace :puma do
                   "--control-token foobar"
                 ]
 
-                command = "/usr/bin/screen -dmS puma#{latest_release_version} bash -c 'cd #{release_path} && #{SSHKit.config.command_map.prefix[:puma].join(" ")} puma #{puma_args.join(" ")}'"
+                command = "/usr/bin/screen -dmS puma-#{latest_release_version} bash -c 'cd #{release_path} && #{SSHKit.config.command_map.prefix[:puma].join(" ")} puma #{puma_args.join(" ")}'"
                 execute command
               end
             end
